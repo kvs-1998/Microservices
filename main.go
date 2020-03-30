@@ -13,14 +13,15 @@ import (
 
 func main() {
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHello(l)
+	//hh := handlers.NewHello(l)
+	ph := handlers.NewProducts(l)
 	gh := handlers.NewGoodbye(l)
 	//servemux is an handler
 	//which handler registered against it get called
 	//and then just call servehttp func of the handler based on
 	// the request
 	sm := http.NewServeMux() //serve mux created
-	sm.Handle("/", hh)       //register path to hh-hello handler
+	sm.Handle("/", ph)       //register path to hh-hello handler
 	sm.Handle("/Goodbye", gh)
 
 	s := &http.Server{
@@ -43,7 +44,7 @@ func main() {
 	signal.Notify(sigChan, os.Interrupt)
 	signal.Notify(sigChan, os.Kill)
 
-	sig := <- sigChan
+	sig := <-sigChan
 	l.Println("Received terminate, graceful shutdown", sig)
 
 	//To Forcefully close after 30 seconds
